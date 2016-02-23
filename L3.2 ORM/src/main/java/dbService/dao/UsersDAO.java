@@ -3,6 +3,7 @@ package dbService.dao;
 import dbService.dataSets.UsersDataSet;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -26,11 +27,17 @@ public class UsersDAO {
     }
 
     public long getUserId(String name) throws HibernateException {
-        Criteria criteria = session.createCriteria(UsersDataSet.class);
-        return ((UsersDataSet) criteria.add(Restrictions.eq("name", name)).uniqueResult()).getId();
+        try {
+            Criteria criteria = session.createCriteria(UsersDataSet.class);
+            Long id = ((UsersDataSet) criteria.add(Restrictions.eq("name", name)).uniqueResult()).getId();
+            return id;
+        }
+        catch (NullPointerException e) {
+            return 0;
+        }
     }
 
-    public long insertUser(String name) throws HibernateException {
-        return (Long) session.save(new UsersDataSet(name));
+    public long insertUser(String name, String password) throws HibernateException {
+        return (Long) session.save(new UsersDataSet(name, password));
     }
 }

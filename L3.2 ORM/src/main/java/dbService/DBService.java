@@ -2,6 +2,7 @@ package dbService;
 
 import dbService.dao.UsersDAO;
 import dbService.dataSets.UsersDataSet;
+import org.h2.table.Table;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,7 +24,7 @@ import java.sql.SQLException;
  */
 public class DBService {
     private static final String hibernate_show_sql = "true";
-    private static final String hibernate_hbm2ddl_auto = "create";
+    private static final String hibernate_hbm2ddl_auto = "Update";
 
     private final SessionFactory sessionFactory;
 
@@ -40,7 +41,9 @@ public class DBService {
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/db_example");
+//        configuration.setProperty("hibernate.connection.username", "root");
         configuration.setProperty("hibernate.connection.username", "tully");
+//        configuration.setProperty("hibernate.connection.password", "root");
         configuration.setProperty("hibernate.connection.password", "tully");
         configuration.setProperty("hibernate.show_sql", hibernate_show_sql);
         configuration.setProperty("hibernate.hbm2ddl.auto", hibernate_hbm2ddl_auto);
@@ -74,12 +77,24 @@ public class DBService {
         }
     }
 
-    public long addUser(String name) throws DBException {
+    public long getUserId(String name) throws DBException {
+        try {
+            Session session = sessionFactory.openSession();
+            UsersDAO dao = new UsersDAO(session);
+            long id = dao.getUserId(name);
+            session.close();
+            return id;
+        } catch (HibernateException e) {
+            throw new DBException(e);
+        }
+    }
+
+    public long addUser(String name, String password) throws DBException {
         try {
             Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
             UsersDAO dao = new UsersDAO(session);
-            long id = dao.insertUser(name);
+            long id = dao.insertUser(name, password);
             transaction.commit();
             session.close();
             return id;
