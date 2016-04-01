@@ -12,9 +12,9 @@ public class AccountServer implements AccountServerI {
     private int usersCount;
     private int usersLimit;
 
-    public AccountServer(int usersLimit) {
+    public AccountServer() {
         this.usersCount = 0;
-        this.usersLimit = usersLimit;
+        this.usersLimit = 10;
     }
 
     @Override

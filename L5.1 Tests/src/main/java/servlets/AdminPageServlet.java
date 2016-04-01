@@ -18,12 +18,12 @@ import java.io.IOException;
  *         <p>
  *         Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
  */
-public class HomePageServlet extends HttpServlet {
-    static final Logger logger = LogManager.getLogger(HomePageServlet.class.getName());
-    public static final String PAGE_URL = "/home";
+public class AdminPageServlet extends HttpServlet {
+    static final Logger logger = LogManager.getLogger(AdminPageServlet.class.getName());
+    public static final String PAGE_URL = "/admin";
     private final AccountServerI accountServer;
 
-    public HomePageServlet(AccountServerI accountServer) {
+    public AdminPageServlet(AccountServerI accountServer) {
         this.accountServer = accountServer;
     }
 
@@ -46,10 +46,12 @@ public class HomePageServlet extends HttpServlet {
 
         logger.info("Limit: {}. Count {}", limit, count);
 
+
+
         if (limit > count) {
             logger.info("User pass");
             accountServer.addNewUser();
-            response.getWriter().println("Hello, world!");
+            response.getWriter().println(limit);
             response.setStatus(HttpServletResponse.SC_OK);
         } else {
             logger.info("User were rejected");

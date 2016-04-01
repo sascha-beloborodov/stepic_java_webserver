@@ -49,10 +49,10 @@ public class HomePageServletTest {
     public void testRemove() throws Exception {
         final StringWriter stringWriter = new StringWriter();
         HttpServletResponse response = getMockedResponse(stringWriter);
-        HttpServletRequest request = getMockedRequest(HomePageServlet.PAGE_URL);
+        HttpServletRequest request = getMockedRequest(AdminPageServlet.PAGE_URL);
         when(request.getParameter("remove")).thenReturn("");
 
-        HomePageServlet homePage = new HomePageServlet(accountServer);
+        AdminPageServlet homePage = new AdminPageServlet(accountServer);
 
         homePage.doGet(request, response);
 
